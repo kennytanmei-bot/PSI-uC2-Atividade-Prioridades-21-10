@@ -38,7 +38,7 @@ void thread_A(void *p1, void *p2, void *p3)
         printk("Tempo decorrido para o thread A: %llu ms\n", end_msA - start_msA);
         printk("Tempo de inicio e fim (respectivamente) do thread A: %llu %llu\n", start_msA, end_msA);
    
-        //k_msleep(TEMPO_A_MS);       // Dorme — libera CPU
+        k_msleep(TEMPO_A_MS);       // Dorme — libera CPU
 
 
     }
@@ -70,7 +70,7 @@ void thread_B(void *p1, void *p2, void *p3)
         printk("Tempo decorrido para o thread B: %llu ms\n", end_msB - start_msB);
         printk("Tempo de inicio e fim (respectivamente) do thread B: %llu %llu\n", start_msB, end_msB);
 
-        k_msleep(TEMPO_B_MS);       // Dorme um pouco
+        //k_msleep(TEMPO_B_MS);       // Dorme um pouco
     }
 }
 
