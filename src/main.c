@@ -11,9 +11,9 @@ static const struct gpio_dt_spec ledA = GPIO_DT_SPEC_GET(LED_A_NODE, gpios);
 static const struct gpio_dt_spec ledB = GPIO_DT_SPEC_GET(LED_B_NODE, gpios);
 
 // --- Prioridades e tempos ---
-#define PRIO_THREAD_A 8  // Maior prioridade (número menor)
+#define PRIO_THREAD_A 3  // Maior prioridade (número menor)
 #define PRIO_THREAD_B 7   // Menor prioridade
-#define TEMPO_A_MS   2000   // Thread A dorme
+#define TEMPO_A_MS   1000   // Thread A dorme
 #define TEMPO_B_MS   1500   // Thread B dorme
 
 // ----------------------------------------------------
