@@ -12,9 +12,23 @@ static const struct gpio_dt_spec ledB = GPIO_DT_SPEC_GET(LED_B_NODE, gpios);
 
 // --- Prioridades e tempos ---
 #define PRIO_THREAD_A 5  // Maior prioridade (número menor)
-#define PRIO_THREAD_B -1   // Menor prioridade
-#define TEMPO_A_MS   1000   // Thread A dorme
+#define PRIO_THREAD_B 7   // Menor prioridade
+#define TEMPO_A_MS   1500   // Thread A dorme
 #define TEMPO_B_MS   1000   // Thread B dorme
+
+// LEDs e Botão
+#define LED_C_NODE DT_ALIAS(led1)
+#define BUTTON_NODE DT_NODELABEL(user_button_0)
+
+static const struct gpio_dt_spec ledc = GPIO_DT_SPEC_GET(LED_C_NODE, gpios);
+static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET(BUTTON_NODE, gpios);
+static struct gpio_callback button_cb_data;
+
+// ISR - Toggle LED
+void button_isr(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+{
+    gpio_pin_toggle_dt(&ledc);
+}
 
 // ----------------------------------------------------
 // THREAD A — Tarefa curta, alta prioridade
@@ -97,6 +111,15 @@ int main()
     printk("=== Demonstração de Preempção com LEDs ===\n");
     printk("Thread A (vermelho): prioridade %d\n", PRIO_THREAD_A);
     printk("Thread B (verde): prioridade %d\n", PRIO_THREAD_B);
+
+    // Configurar LED e botão com pull-up
+    gpio_pin_configure_dt(&ledc, GPIO_OUTPUT_INACTIVE);
+    gpio_pin_configure_dt(&button, GPIO_INPUT | GPIO_PULL_UP);
+
+    // Configurar interrupção na borda de descida
+    gpio_pin_interrupt_configure_dt(&button, GPIO_INT_EDGE_FALLING);
+    gpio_init_callback(&button_cb_data, button_isr, BIT(button.pin));
+    gpio_add_callback(button.port, &button_cb_data);
 
     while (1) {
         k_sleep(K_FOREVER); // Main dorme para liberar CPU.
