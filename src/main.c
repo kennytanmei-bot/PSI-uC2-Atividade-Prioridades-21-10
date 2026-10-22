@@ -17,7 +17,7 @@ static const struct gpio_dt_spec ledB = GPIO_DT_SPEC_GET(LED_B_NODE, gpios);
 #define TEMPO_B_MS   1000   // Thread B dorme
 
 // LEDs e Botão
-#define LED_C_NODE DT_ALIAS(led1)
+#define LED_C_NODE DT_ALIAS(led1) //LED azul
 #define BUTTON_NODE DT_NODELABEL(user_button_0)
 
 static const struct gpio_dt_spec ledc = GPIO_DT_SPEC_GET(LED_C_NODE, gpios);
@@ -28,6 +28,7 @@ static struct gpio_callback button_cb_data;
 void button_isr(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
     gpio_pin_toggle_dt(&ledc);
+    printk("Botao acionado!!\n");
 }
 
 // ----------------------------------------------------
